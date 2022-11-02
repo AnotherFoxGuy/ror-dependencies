@@ -36,6 +36,16 @@ endif ()
 project(ror-dependencies VERSION 30)
 
 
+find_program(SCCACHE_PROGRAM sccache)
+find_program(CCACHE_PROGRAM ccache)
+if (SCCACHE_PROGRAM)
+    set(COMPILER_LAUNCHER_ARG "-DCMAKE_C_COMPILER_LAUNCHER=${SCCACHE_PROGRAM}" "-DCMAKE_CXX_COMPILER_LAUNCHER=${SCCACHE_PROGRAM}")
+    message("Using ${SCCACHE_PROGRAM} for speeding up build")
+elseif (CCACHE_PROGRAM)
+    set(COMPILER_LAUNCHER_ARG "-DCMAKE_C_COMPILER_LAUNCHER=${CCACHE_PROGRAM}" "-DCMAKE_CXX_COMPILER_LAUNCHER=${CCACHE_PROGRAM}")
+    message("Using ${CCACHE_PROGRAM} for speeding up build")
+endif ()
+
 # ------------------------------------------------------------------------------------------------#
 # Options to enable/disable building specific dependencies
 # ------------------------------------------------------------------------------------------------#
