@@ -5,7 +5,11 @@ on: [ push, pull_request ]
 jobs:
   build:
     name: Building windows deps
-    runs-on: windows-2019
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019, windows-2022]
+        config: [Release, Debug]
     steps:
       - uses: actions/checkout@v3.1.0
 
@@ -16,7 +20,7 @@ jobs:
         run: cmake .
 
       - name: Build
-        run: msbuild /p:Configuration=Release /m ror-dependencies.sln
+        run: msbuild /p:Configuration=${{ matrix.config }} /m ror-dependencies.sln
 
       - name: Upload deps folder
         uses: actions/upload-artifact@v3
